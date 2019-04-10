@@ -14,4 +14,8 @@ class Paddle{
     ctx.fill();
     ctx.closePath();
   }
+
+  shoot(){
+    let shot = new Shot(this.width / 2, canvas.height - 30, 0, 2, 2, "#0095DD", this);
+  }
 }

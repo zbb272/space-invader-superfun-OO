@@ -8,9 +8,6 @@ class Scoreboard{
     ctx.font = "16px Arial";
     ctx.fillStyle = "#0095DD";
     ctx.fillText("Score: " + this.score, 8, 20);
-    // cts.
-    // ctx.font = "16px Arial";
-    // ctx.fillStyle = "#0095DD";
     ctx.fillText("Lives: "+ this.lives, canvas.width-65, 20);
   }
 }

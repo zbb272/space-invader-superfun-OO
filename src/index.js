@@ -1,4 +1,4 @@
-
+let bricks = [];
 document.addEventListener("DOMContentLoaded", runner);
 
 function runner(){
@@ -19,7 +19,7 @@ function runner(){
   let brickRowCount = 3;
   let brickColumnCount = 5;
   //2-dimensial brick array
-  let bricks = [];
+
   for(let c=0; c<brickColumnCount; c++) {
       bricks[c] = [];
       for(let r=0; r<brickRowCount; r++) {
@@ -47,10 +47,33 @@ function runner(){
 
   //collision detection
   function collisionDetection() {
+    //shots
     for(let c = 0; c < brickColumnCount; c++) {
       for(let r = 0; r < brickRowCount; r++) {
         let brick = bricks[c][r];
         if(brick.status === 1){
+          Shot.all.forEach(shot => {
+            if(shot.x > brick.x && shot.x < brick.x+bricks[c][r].width && shot.y > brick.y && shot.y < brick.y+bricks[c][r].height) {
+              shot.destroy();
+              brick.status = 0;
+              scoreBoard.score++;
+              if(scoreBoard.score == brickRowCount * brickColumnCount) {
+                alert("YOU WIN, CONGRATULATIONS!");
+                document.location.reload();
+              }
+            }
+          })
+        }
+      }
+    }
+
+    //bricks
+    for(let c = 0; c < brickColumnCount; c++) {
+      for(let r = 0; r < brickRowCount; r++) {
+        let brick = bricks[c][r];
+        if(brick.status === 1){
+
+
           if(ball.x > brick.x && ball.x < brick.x+bricks[c][r].width && ball.y > brick.y && ball.y < brick.y+bricks[c][r].height) {
             ball.dy = -ball.dy;
             brick.status = 0;
@@ -71,10 +94,18 @@ function runner(){
     drawBricks();
     ball.draw(ctx);
     paddle.draw(ctx);
+    Shot.all.forEach(shot => shot.draw(ctx));
+    // shot.draw(ctx);
     scoreBoard.draw(ctx);
     collisionDetection();
 
     //Check that ball is within the canvas and move it
+    Shot.all.forEach(shot => {
+      if(shot.checkXBoundry()){};
+      if(shot.checkYBoundry()){};
+      shot.y -= shot.dy;
+    });
+
     if(ball.checkXBoundry()){}
     if(ball.checkYBoundry()){}
     else if(ball.y + ball.dy > canvas.height-ball.radius) {
@@ -119,6 +150,9 @@ function runner(){
     else if(event.key === "left" || event.key === "ArrowLeft"){
       leftPressed = true;
     }
+    else if(event.keyCode === 32 || event.key === "Space"){
+      paddle.shoot();
+    }
   }
 
   function keyUpHandler(event){
@@ -131,9 +165,9 @@ function runner(){
   }
 
   function mouseMoveHandler(event){
-    let relativeX = event.clientX - canvas.offsetLeft;
-    if(relativeX > 0 && relativeX < canvas.width){
-      paddle.x = relativeX - paddle.width / 2;
-    }
+    // let relativeX = event.clientX - canvas.offsetLeft;
+    // if(relativeX > 0 && relativeX < canvas.width){
+    //   paddle.x = relativeX - paddle.width / 2;
+    // }
   }
 }
