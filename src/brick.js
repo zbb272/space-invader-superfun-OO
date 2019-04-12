@@ -10,7 +10,7 @@ class Brick{
     this.offsetLeft = offsetLeft;
     this.status = status;
     this.color = color;
-    Brick.all.push(this);
+    Brick.all.unshift(this);
   }
 
   updateX(column){
